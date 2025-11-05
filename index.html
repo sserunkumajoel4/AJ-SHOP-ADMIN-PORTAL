@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AJ Shop - Admin Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/currency.js"></script>
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -49,6 +50,174 @@
             padding: 20px;
         }
 
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .login-header {
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: var(--text-dark);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-header p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-medium);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-group input {
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background: var(--text-light);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .login-footer {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .divider span {
+            padding: 0 15px;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .error {
+            color: #e53e3e;
+            background: #fed7d7;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .success {
+            color: #38a169;
+            background: #c6f6d5;
+            padding: 15px;
+            border-radius: var(--radius-md);
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Admin Panel Styles (only shown after login) */
+        .admin-panel {
+            display: none;
+        }
+
         .header {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
@@ -58,6 +227,7 @@
             box-shadow: var(--shadow-xl);
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
         }
 
         .header h1 {
@@ -75,6 +245,46 @@
         .header p {
             color: var(--text-light);
             font-size: 1.1rem;
+        }
+
+        .user-info {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: var(--danger-gradient);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
 
         .nav-tabs {
@@ -190,21 +400,6 @@
             margin-bottom: 30px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-medium);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .form-group input,
         .form-group select,
         .form-group textarea {
             padding: 15px;
@@ -215,39 +410,11 @@
             background: white;
         }
 
-        .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: var(--transition);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--primary-gradient);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-            opacity: 0.9;
         }
 
         .btn-danger {
@@ -335,6 +502,23 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        .product-price {
+            margin-bottom: 10px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .discounted-price {
+            color: #e53e3e;
+            font-weight: bold;
+            font-size: 1.1rem;
         }
 
         .product-meta {
@@ -446,28 +630,6 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        .error {
-            color: #e53e3e;
-            background: #fed7d7;
-            padding: 15px;
-            border-radius: var(--radius-md);
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .success {
-            color: #38a169;
-            background: #c6f6d5;
-            padding: 15px;
-            border-radius: var(--radius-md);
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .stats-grid {
@@ -714,6 +876,12 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            .user-info {
+                position: static;
+                justify-content: center;
+                margin-top: 15px;
+            }
         }
 
         /* Toast notifications */
@@ -819,243 +987,353 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-store"></i> AJ Shop Admin Portal</h1>
-            <p>Manage your products, orders, and inventory with ease</p>
-        </div>
-
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('dashboard')">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </button>
-            <button class="nav-tab" onclick="showTab('add-product')">
-                <i class="fas fa-plus-circle"></i> Add Product
-            </button>
-            <button class="nav-tab" onclick="showTab('view-products')">
-                <i class="fas fa-boxes"></i> View Products
-            </button>
-            <button class="nav-tab" onclick="showTab('view-orders')">
-                <i class="fas fa-clipboard-list"></i> View Orders
-            </button>
-        </div>
-
-        <!-- Dashboard Tab -->
-        <div id="dashboard" class="tab-content active">
-            <div class="tab-header">
-                <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search...">
-                </div>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1><i class="fas fa-store"></i> AJ Shop Admin</h1>
+                <p>Please sign in to access the admin panel</p>
             </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon primary">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <div class="stat-value" id="totalProducts">0</div>
-                    <div class="stat-label">Total Products</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon success">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <div class="stat-value" id="totalOrders">0</div>
-                    <div class="stat-label">Total Orders</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon warning">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <div class="stat-value" id="pendingOrders">0</div>
-                    <div class="stat-label">Pending Orders</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon danger">
-                        <i class="fas fa-exclamation-circle"></i>
-                    </div>
-                    <div class="stat-value" id="lowStock">0</div>
-                    <div class="stat-label">Low Stock Items</div>
-                </div>
+            
+            <div id="loginError" class="error" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorMessage"></span>
             </div>
-
-            <div class="tab-header">
-                <h2><i class="fas fa-chart-line"></i> Recent Activity</h2>
-            </div>
-            <div id="recentActivity">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    Loading recent activity...
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Product Tab -->
-        <div id="add-product" class="tab-content">
-            <div class="tab-header">
-                <h2><i class="fas fa-plus-circle"></i> Add New Product</h2>
-            </div>
-            <form id="productForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="name"><i class="fas fa-tag"></i> Product Name</label>
-                        <input type="text" id="name" required placeholder="Enter product name">
-                    </div>
-                    <div class="form-group">
-                        <label for="price"><i class="fas fa-dollar-sign"></i> Price ($)</label>
-                        <input type="number" id="price" step="0.01" required placeholder="0.00">
-                    </div>
-                    <div class="form-group">
-                        <label for="stock"><i class="fas fa-cubes"></i> Stock Quantity</label>
-                        <input type="number" id="stock" required placeholder="Enter quantity">
-                    </div>
-                    <div class="form-group">
-                        <label for="color"><i class="fas fa-palette"></i> Color</label>
-                        <input type="text" id="color" required placeholder="Enter color">
-                    </div>
-                    <div class="form-group">
-                        <label for="size"><i class="fas fa-ruler-combined"></i> Size</label>
-                        <input type="text" id="size" required placeholder="Enter size">
-                    </div>
-                    <div class="form-group">
-                        <label for="category"><i class="fas fa-list"></i> Category</label>
-                        <select id="category" required>
-                            <option value="">Select Category</option>
-                            <option value="Belts">Belts</option>
-                            <option value="Phone covers">Phone covers</option>
-                            <option value="Wallets">Wallets</option>
-                            <option value="Sandals">Sandals</option>
-                            <option value="Back to school">Home & Garden</option>
-                            <option value="Shoes">Shoes</option>
-                            <option value="Car-seats">Car-seats</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
+            
+            <form id="loginForm" class="login-form">
                 <div class="form-group">
-                    <label><i class="fas fa-image"></i> Product Image (Optional)</label>
-                    <div class="image-upload">
-                        <div class="image-preview" id="imagePreview">
-                            <label for="image" class="upload-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Click to upload product image</span>
-                                <small class="upload-info">Supports JPG, PNG (Max 5MB)</small>
-                            </label>
-                            <input type="file" id="image" accept="image/*" style="display: none;">
-                        </div>
-                        <div class="upload-progress" id="uploadProgress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progressBar"></div>
-                            </div>
-                            <div class="progress-text" id="progressText">Uploading...</div>
-                        </div>
-                    </div>
+                    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" required placeholder="Enter your email">
                 </div>
+                
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Add Product
+                    <i class="fas fa-sign-in-alt"></i> Sign In
                 </button>
             </form>
-        </div>
-
-        <!-- View Products Tab -->
-        <div id="view-products" class="tab-content">
-            <div class="tab-header">
-                <h2><i class="fas fa-boxes"></i> Product Inventory</h2>
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="productSearch" placeholder="Search products...">
+            
+            <div class="login-footer">
+                <div class="divider">
+                    <span>Don't have an account?</span>
                 </div>
-            </div>
-            <div id="productsContainer">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    Loading products...
-                </div>
-            </div>
-            <div class="pagination" id="productsPagination">
-                <!-- Pagination will be added dynamically -->
-            </div>
-        </div>
-
-        <!-- View Orders Tab -->
-        <div id="view-orders" class="tab-content">
-            <div class="tab-header">
-                <h2><i class="fas fa-clipboard-list"></i> Order Management</h2>
-                <div class="dropdown">
-                    <select class="dropdown-select" id="orderFilter" onchange="filterOrders()">
-                        <option value="all">All Orders</option>
-                        <option value="pending">Pending</option>
-                        <option value="processing">Processing</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="cancelled">Cancelled</option>
-                    </select>
-                    <div class="dropdown-arrow">
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                </div>
-            </div>
-            <div id="ordersContainer">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    Loading orders...
-                </div>
-            </div>
-            <div class="pagination" id="ordersPagination">
-                <!-- Pagination will be added dynamically -->
+                
+                <button type="button" class="btn btn-secondary" id="showRegisterBtn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Edit Product -->
-    <div class="modal" id="editProductModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Edit Product</h3>
-                <button class="modal-close" onclick="closeModal('editProductModal')">&times;</button>
+    <!-- Register Page -->
+    <div id="registerPage" class="login-container" style="display: none;">
+        <div class="login-card">
+            <div class="login-header">
+                <h1><i class="fas fa-store"></i> AJ Shop Admin</h1>
+                <p>Create a new admin account</p>
             </div>
-            <div class="modal-body">
-                <form id="editProductForm">
-                    <input type="hidden" id="editProductId">
-                    <div class="form-group">
-                        <label for="editName">Product Name</label>
-                        <input type="text" id="editName" required>
+            
+            <div id="registerError" class="error" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="registerErrorMessage"></span>
+            </div>
+            
+            <form id="registerForm" class="login-form">
+                <div class="form-group">
+                    <label for="registerName"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" id="registerName" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="registerEmail" required placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="registerPassword" required placeholder="Create a password (min. 6 characters)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" id="confirmPassword" required placeholder="Confirm your password">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <div class="divider">
+                    <span>Already have an account?</span>
+                </div>
+                
+                <button type="button" class="btn btn-secondary" id="showLoginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Back to Sign In
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel (only shown after login) -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="container">
+            <div class="header">
+                <h1><i class="fas fa-store"></i> AJ Shop Admin Portal</h1>
+                <p>Manage your products, orders, and inventory with ease</p>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <span id="userName">Admin User</span>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="nav-tab" onclick="showTab('add-product')">
+                    <i class="fas fa-plus-circle"></i> Add Product
+                </button>
+                <button class="nav-tab" onclick="showTab('view-products')">
+                    <i class="fas fa-boxes"></i> View Products
+                </button>
+                <button class="nav-tab" onclick="showTab('view-orders')">
+                    <i class="fas fa-clipboard-list"></i> View Orders
+                </button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="tab-header">
+                    <h2><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h2>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon primary">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <div class="stat-value" id="totalProducts">0</div>
+                        <div class="stat-label">Total Products</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon warning">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-value" id="pendingOrders">0</div>
+                        <div class="stat-label">Pending Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon danger">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="stat-value" id="lowStock">0</div>
+                        <div class="stat-label">Low Stock Items</div>
+                    </div>
+                </div>
+
+                <div class="tab-header">
+                    <h2><i class="fas fa-chart-line"></i> Recent Activity</h2>
+                </div>
+                <div id="recentActivity">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        Loading recent activity...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Product Tab -->
+            <div id="add-product" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-plus-circle"></i> Add New Product</h2>
+                </div>
+                <form id="productForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="name"><i class="fas fa-tag"></i> Product Name</label>
+                            <input type="text" id="name" required placeholder="Enter product name">
+                        </div>
+                        <div class="form-group">
+                            <label for="originalPrice"><i class="fas fa-dollar-sign"></i> Original Price (UGX)</label>
+                            <input type="number" id="originalPrice" step="0.01" required placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="discountedPrice"><i class="fas fa-tag"></i> Discounted Price (UGX)</label>
+                            <input type="number" id="discountedPrice" step="0.01" placeholder="0.00 (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label for="stock"><i class="fas fa-cubes"></i> Stock Quantity</label>
+                            <input type="number" id="stock" required placeholder="Enter quantity">
+                        </div>
+                        <div class="form-group">
+                            <label for="color"><i class="fas fa-palette"></i> Color</label>
+                            <input type="text" id="color" required placeholder="Enter color">
+                        </div>
+                        <div class="form-group">
+                            <label for="size"><i class="fas fa-ruler-combined"></i> Size</label>
+                            <input type="text" id="size" required placeholder="Enter size">
+                        </div>
+                        <div class="form-group">
+                            <label for="category"><i class="fas fa-list"></i> Category</label>
+                            <select id="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Belts">Belts</option>
+                                <option value="Phone covers">Phone covers</option>
+                                <option value="Wallets">Wallets</option>
+                                <option value="Sandals">Sandals</option>
+                                <option value="Home & Garden">Home & Garden</option>
+                                <option value="Shoes">Shoes</option>
+                                <option value="Car-seats">Car-seats</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="editPrice">Price ($)</label>
-                        <input type="number" id="editPrice" step="0.01" required>
+                        <label><i class="fas fa-image"></i> Product Image (Optional)</label>
+                        <div class="image-upload">
+                            <div class="image-preview" id="imagePreview">
+                                <label for="image" class="upload-label">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <span>Click to upload product image</span>
+                                    <small class="upload-info">Supports JPG, PNG (Max 5MB)</small>
+                                </label>
+                                <input type="file" id="image" accept="image/*" style="display: none;">
+                            </div>
+                            <div class="upload-progress" id="uploadProgress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressBar"></div>
+                                </div>
+                                <div class="progress-text" id="progressText">Uploading...</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="editStock">Stock Quantity</label>
-                        <input type="number" id="editStock" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editColor">Color</label>
-                        <input type="text" id="editColor" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editSize">Size</label>
-                        <input type="text" id="editSize" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="editCategory">Category</label>
-                        <select id="editCategory" required>
-                            <option value="Belts">Belts</option>
-                            <option value="Phone covers">Phone covers</option>
-                            <option value="Wallets">Wallets</option>
-                            <option value="Sandals">Sandals</option>
-                            <option value="Back to school">Home & Garden</option>
-                            <option value="Shoes">Shoes</option>
-                            <option value="Car-seats">Car-seats</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Add Product
+                    </button>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger" onclick="closeModal('editProductModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="saveProductChanges()">Save Changes</button>
+
+            <!-- View Products Tab -->
+            <div id="view-products" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-boxes"></i> Product Inventory</h2>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="productSearch" placeholder="Search products...">
+                    </div>
+                </div>
+                <div id="productsContainer">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        Loading products...
+                    </div>
+                </div>
+                <div class="pagination" id="productsPagination">
+                    <!-- Pagination will be added dynamically -->
+                </div>
+            </div>
+
+            <!-- View Orders Tab -->
+            <div id="view-orders" class="tab-content">
+                <div class="tab-header">
+                    <h2><i class="fas fa-clipboard-list"></i> Order Management</h2>
+                    <div class="dropdown">
+                        <select class="dropdown-select" id="orderFilter" onchange="filterOrders()">
+                            <option value="all">All Orders</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                        <div class="dropdown-arrow">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div id="ordersContainer">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        Loading orders...
+                    </div>
+                </div>
+                <div class="pagination" id="ordersPagination">
+                    <!-- Pagination will be added dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Edit Product -->
+        <div class="modal" id="editProductModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-edit"></i> Edit Product</h3>
+                    <button class="modal-close" onclick="closeModal('editProductModal')">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProductId">
+                        <div class="form-group">
+                            <label for="editName">Product Name</label>
+                            <input type="text" id="editName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editOriginalPrice">Original Price (UGX)</label>
+                            <input type="number" id="editOriginalPrice" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editDiscountedPrice">Discounted Price (UGX)</label>
+                            <input type="number" id="editDiscountedPrice" step="0.01" placeholder="0.00 (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label for="editStock">Stock Quantity</label>
+                            <input type="number" id="editStock" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editColor">Color</label>
+                            <input type="text" id="editColor" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editSize">Size</label>
+                            <input type="text" id="editSize" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCategory">Category</label>
+                            <select id="editCategory" required>
+                                <option value="Belts">Belts</option>
+                                <option value="Phone covers">Phone covers</option>
+                                <option value="Wallets">Wallets</option>
+                                <option value="Sandals">Sandals</option>
+                                <option value="Home & Garden">Home & Garden</option>
+                                <option value="Shoes">Shoes</option>
+                                <option value="Car-seats">Car-seats</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" onclick="closeModal('editProductModal')">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveProductChanges()">Save Changes</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1063,8 +1341,27 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged,
+            updateProfile
+        } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            getDocs, 
+            doc, 
+            updateDoc, 
+            deleteDoc, 
+            query, 
+            where, 
+            orderBy, 
+            limit 
+        } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDEEzvNJAfZB-ETDK4DsR1mVC3jqwSzYn4",
@@ -1077,8 +1374,12 @@
         };
 
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
+
+        // Cloudinary Configuration
+        const CLOUDINARY_CLOUD_NAME = "dxgrgkz7c"; // Replace with your Cloudinary cloud name
+        const CLOUDINARY_UPLOAD_PRESET = "unsigned_uploads"; // Replace with your unsigned upload preset
 
         // Global variables
         let products = [];
@@ -1089,12 +1390,66 @@
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
-            loadDashboardStats();
             setupEventListeners();
+            checkAuthState();
         });
+
+        // Check authentication state
+        function checkAuthState() {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // User is signed in
+                    showAdminPanel(user);
+                } else {
+                    // User is signed out
+                    showLoginPage();
+                }
+            });
+        }
+
+        // Show login page
+        function showLoginPage() {
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('registerPage').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        // Show register page
+        function showRegisterPage() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('registerPage').style.display = 'flex';
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        // Show admin panel
+        function showAdminPanel(user) {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('registerPage').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            
+            // Update user info
+            document.getElementById('userName').textContent = user.displayName || user.email;
+            document.getElementById('userAvatar').textContent = (user.displayName || user.email).charAt(0).toUpperCase();
+            
+            // Load initial data
+            loadDashboardStats();
+            loadRecentActivity();
+        }
 
         // Set up event listeners
         function setupEventListeners() {
+            // Login form
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Register form
+            document.getElementById('registerForm').addEventListener('submit', handleRegister);
+            
+            // Show register page
+            document.getElementById('showRegisterBtn').addEventListener('click', showRegisterPage);
+            
+            // Show login page
+            document.getElementById('showLoginBtn').addEventListener('click', showLoginPage);
+            
             // Image upload preview
             document.getElementById('image').addEventListener('change', handleImageUpload);
             
@@ -1110,6 +1465,73 @@
                 saveProductChanges();
             });
         }
+
+        // Handle login
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                // Success - auth state change will handle the UI update
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorDiv.style.display = 'flex';
+            }
+        }
+
+        // Handle registration
+        async function handleRegister(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('registerError');
+            const errorMessage = document.getElementById('registerErrorMessage');
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match';
+                errorDiv.style.display = 'flex';
+                return;
+            }
+            
+            // Validate password length
+            if (password.length < 6) {
+                errorMessage.textContent = 'Password must be at least 6 characters';
+                errorDiv.style.display = 'flex';
+                return;
+            }
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                // Update user profile with name
+                await updateProfile(userCredential.user, {
+                    displayName: name
+                });
+                
+                // Success - auth state change will handle the UI update
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorDiv.style.display = 'flex';
+            }
+        }
+
+        // Logout function
+        window.logout = async function() {
+            try {
+                await signOut(auth);
+                // Auth state change will handle the UI update
+            } catch (error) {
+                showToast('Error signing out: ' + error.message, 'error');
+            }
+        };
 
         // Tab switching
         window.showTab = function(tabName) {
@@ -1183,34 +1605,56 @@
             currentImageFile = null;
         };
 
-        // Upload image to Firebase Storage
-        async function uploadImage(file) {
+        // Upload image to Cloudinary
+        async function uploadToCloudinary(file) {
             return new Promise((resolve, reject) => {
-                const fileName = `products/${Date.now()}_${file.name}`;
-                const storageRef = ref(storage, fileName);
-                const uploadTask = uploadBytesResumable(storageRef, file);
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+                formData.append("folder", "products");
 
                 // Show progress
                 document.getElementById('uploadProgress').style.display = 'block';
 
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        document.getElementById('progressBar').style.width = progress + '%';
-                        document.getElementById('progressText').textContent = `Uploading... ${Math.round(progress)}%`;
-                    },
-                    (error) => {
-                        document.getElementById('uploadProgress').style.display = 'none';
-                        reject(error);
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            document.getElementById('uploadProgress').style.display = 'none';
-                            resolve(downloadURL);
-                        });
+                const xhr = new XMLHttpRequest();
+                
+                xhr.upload.addEventListener("progress", function(e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = (e.loaded / e.total) * 100;
+                        document.getElementById('progressBar').style.width = percentComplete + '%';
+                        document.getElementById('progressText').textContent = `Uploading... ${Math.round(percentComplete)}%`;
                     }
-                );
+                });
+
+                xhr.addEventListener("load", function() {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        document.getElementById('uploadProgress').style.display = 'none';
+                        resolve(response.secure_url);
+                    } else {
+                        document.getElementById('uploadProgress').style.display = 'none';
+                        reject(new Error('Upload failed'));
+                    }
+                });
+
+                xhr.addEventListener("error", function() {
+                    document.getElementById('uploadProgress').style.display = 'none';
+                    reject(new Error('Upload failed'));
+                });
+
+                xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`);
+                xhr.send(formData);
             });
+        }
+
+        // Format UGX currency
+        function formatUGX(amount) {
+            return new Intl.NumberFormat('en-UG', {
+                style: 'currency',
+                currency: 'UGX',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
         }
 
         // Add product form handler
@@ -1226,14 +1670,19 @@
                 
                 // Only upload image if one was selected
                 if (currentImageFile) {
-                    imageUrl = await uploadImage(currentImageFile);
+                    imageUrl = await uploadToCloudinary(currentImageFile);
                 }
                 
+                const originalPrice = parseFloat(document.getElementById('originalPrice').value);
+                const discountedPrice = document.getElementById('discountedPrice').value ? 
+                    parseFloat(document.getElementById('discountedPrice').value) : null;
+
                 const productData = {
                     name: document.getElementById('name').value,
                     color: document.getElementById('color').value,
                     size: document.getElementById('size').value,
-                    price: parseFloat(document.getElementById('price').value),
+                    originalPrice: originalPrice,
+                    discountedPrice: discountedPrice,
                     stock: parseInt(document.getElementById('stock').value),
                     category: document.getElementById('category').value,
                     createdAt: new Date()
@@ -1374,7 +1823,7 @@
                             <tr style="border-bottom: 1px solid var(--border-color);">
                                 <td style="padding: 10px; font-size: 13px;">${order.id.substring(0, 6)}...</td>
                                 <td style="padding: 10px; font-size: 13px;">${order.customerName || 'N/A'}</td>
-                                <td style="padding: 10px; font-size: 13px;">$${order.totalPrice?.toFixed(2) || '0.00'}</td>
+                                <td style="padding: 10px; font-size: 13px;">${formatUGX(order.totalPrice || 0)}</td>
                             </tr>
                         `;
                     });
@@ -1416,10 +1865,14 @@
                     `;
                     
                     recentProducts.forEach(product => {
+                        const displayPrice = product.discountedPrice ? 
+                            `<span style="text-decoration: line-through; color: var(--text-light); margin-right: 5px;">${formatUGX(product.originalPrice)}</span> ${formatUGX(product.discountedPrice)}` :
+                            `${formatUGX(product.originalPrice)}`;
+                        
                         activityHTML += `
                             <tr style="border-bottom: 1px solid var(--border-color);">
                                 <td style="padding: 10px; font-size: 13px;">${product.name}</td>
-                                <td style="padding: 10px; font-size: 13px;">$${product.price?.toFixed(2) || '0.00'}</td>
+                                <td style="padding: 10px; font-size: 13px;">${displayPrice}</td>
                                 <td style="padding: 10px; font-size: 13px;">${product.stock}</td>
                             </tr>
                         `;
@@ -1534,30 +1987,43 @@
             
             container.innerHTML = `
                 <div class="products-grid">
-                    ${paginatedProducts.map(product => `
-                        <div class="product-card">
-                            ${product.stock < 5 ? `<span class="product-badge">Low Stock</span>` : ''}
-                            <img src="${product.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" alt="${product.name}" class="product-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
-                            <h3 class="product-title">${product.name}</h3>
-                            <div class="product-meta">
-                                <span><strong>Price:</strong> $${product.price?.toFixed(2) || '0.00'}</span>
-                                <span><strong>Stock:</strong> ${product.stock}</span>
+                    ${paginatedProducts.map(product => {
+                        const hasDiscount = product.discountedPrice && product.discountedPrice < product.originalPrice;
+                        const displayPrice = hasDiscount ? 
+                            `<div class="product-price">
+                                <span class="original-price">${formatUGX(product.originalPrice || 0)}</span>
+                                <span class="discounted-price">${formatUGX(product.discountedPrice)}</span>
+                            </div>` :
+                            `<div class="product-price">
+                                <span class="discounted-price">${formatUGX(product.originalPrice || 0)}</span>
+                            </div>`;
+                        
+                        return `
+                            <div class="product-card">
+                                ${product.stock < 5 ? `<span class="product-badge">Low Stock</span>` : ''}
+                                ${hasDiscount ? `<span class="product-badge" style="background: var(--danger-gradient); top: 50px;">Sale</span>` : ''}
+                                <img src="${product.image || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" alt="${product.name}" class="product-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+                                <h3 class="product-title">${product.name}</h3>
+                                ${displayPrice}
+                                <div class="product-meta">
+                                    <span><strong>Stock:</strong> ${product.stock}</span>
+                                    <span><strong>Color:</strong> ${product.color}</span>
+                                </div>
+                                <div class="product-meta">
+                                    <span><strong>Size:</strong> ${product.size}</span>
+                                    <span><strong>Category:</strong> ${product.category}</span>
+                                </div>
+                                <div class="product-actions">
+                                    <button class="btn btn-warning btn-sm" onclick="editProduct('${product.id}')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteProduct('${product.id}')">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </div>
                             </div>
-                            <div class="product-meta">
-                                <span><strong>Color:</strong> ${product.color}</span>
-                                <span><strong>Size:</strong> ${product.size}</span>
-                            </div>
-                            <p><strong>Category:</strong> ${product.category}</p>
-                            <div class="product-actions">
-                                <button class="btn btn-warning btn-sm" onclick="editProduct('${product.id}')">
-                                    <i class="fas fa-edit"></i> Edit
-                                </button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteProduct('${product.id}')">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
-                            </div>
-                        </div>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </div>
             `;
         }
@@ -1569,7 +2035,8 @@
             
             document.getElementById('editProductId').value = product.id;
             document.getElementById('editName').value = product.name;
-            document.getElementById('editPrice').value = product.price;
+            document.getElementById('editOriginalPrice').value = product.originalPrice;
+            document.getElementById('editDiscountedPrice').value = product.discountedPrice || '';
             document.getElementById('editStock').value = product.stock;
             document.getElementById('editColor').value = product.color;
             document.getElementById('editSize').value = product.size;
@@ -1581,9 +2048,14 @@
         // Save product changes
         async function saveProductChanges() {
             const productId = document.getElementById('editProductId').value;
+            const originalPrice = parseFloat(document.getElementById('editOriginalPrice').value);
+            const discountedPrice = document.getElementById('editDiscountedPrice').value ? 
+                parseFloat(document.getElementById('editDiscountedPrice').value) : null;
+
             const productData = {
                 name: document.getElementById('editName').value,
-                price: parseFloat(document.getElementById('editPrice').value),
+                originalPrice: originalPrice,
+                discountedPrice: discountedPrice,
                 stock: parseInt(document.getElementById('editStock').value),
                 color: document.getElementById('editColor').value,
                 size: document.getElementById('editSize').value,
@@ -1706,7 +2178,7 @@
                                     ${order.products ? order.products.slice(0, 2).map(p => `${p.name} (${p.quantity})`).join('<br>') : 'N/A'}
                                     ${order.products && order.products.length > 2 ? `<br><small>+${order.products.length - 2} more</small>` : ''}
                                 </td>
-                                <td>$${order.totalPrice?.toFixed(2) || '0.00'}</td>
+                                <td>${formatUGX(order.totalPrice || 0)}</td>
                                 <td>
                                     <span class="status-badge status-${(order.status || 'pending').toLowerCase()}">
                                         <i class="fas ${getStatusIcon(order.status)}"></i>
